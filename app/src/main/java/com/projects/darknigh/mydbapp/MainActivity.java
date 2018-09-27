@@ -92,8 +92,7 @@ public class MainActivity extends AppCompatActivity {
                         for (Film film : responseList) {
                             dbHandler.addFilm(film);
                         }
-                        films.addAll(responseList);
-                        filmAdapter.notifyDataSetChanged();
+                        refreshListView(responseList);
                     }
 
                     @Override
@@ -104,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.menuClear:
                 dbHandler.deleteAll();
-                refreshListView();
+                refreshListView(dbHandler.getAllFilms());
                 break;
         }
         films.addAll(dbHandler.getAllFilms());
@@ -131,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (editTextCheck(filmName, filmDirector, filmBudget, filmDate)) {
                     dbHandler.updateFilm(new Film(filmDialog.getID(), filmName.getText().toString(), filmDirector.getText().toString(), Integer.valueOf(filmBudget.getText().toString()), filmDate.getText().toString()));
-                    refreshListView();
+                    refreshListView(dbHandler.getAllFilms());
                     dialog.dismiss();
                 }
             }
@@ -141,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dbHandler.deleteFilm(filmDialog);
-                refreshListView();
+                refreshListView(dbHandler.getAllFilms());
                 dialog.dismiss();
             }
         });
@@ -168,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
                 if (editTextCheck(filmName, filmDirector, filmBudget, filmDate)) {
                     Film film = new Film(filmName.getText().toString(), filmDirector.getText().toString(), Integer.valueOf(filmBudget.getText().toString()), filmDate.getText().toString());
                     dbHandler.addFilm(film);
-                    refreshListView();
+                    refreshListView(dbHandler.getAllFilms());
                     dialog.dismiss();
                 }
             }
@@ -176,9 +175,9 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    void refreshListView() {
+    void refreshListView(List<Film> list) {
         films.clear();
-        films.addAll(dbHandler.getAllFilms());
+        films.addAll(list);
         filmAdapter.notifyDataSetChanged();
     }
 

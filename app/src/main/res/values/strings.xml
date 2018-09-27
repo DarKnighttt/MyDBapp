@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">MyDBapp</string>
+    <string name="menu_update">Update data</string>
+    <string name="menu_default">Default data</string>
+    <string name="menu_clear">Clear all data</string>
+    <string name="bnt_add">Add</string>
+    <string name="bnt_save">Save</string>
+    <string name="bnt_delete">Delete</string>
+    <string name="millions">%d million $</string>
+    <string name="film_name">Film name</string>
+    <string name="film_director">Director</string>
+    <string name="film_budget">Budget million $</string>
+    <string name="film_date">Release date</string>
+</resources>

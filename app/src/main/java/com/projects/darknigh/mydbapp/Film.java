@@ -69,4 +69,9 @@ public class Film {
     public void setDate(String date) {
         this.date = date;
     }
+
+    @Override
+    public String toString() {
+        return ("name: " + name + "; director: " + director + "; budget: " + budget + "; date: " + date);
+    }
 }

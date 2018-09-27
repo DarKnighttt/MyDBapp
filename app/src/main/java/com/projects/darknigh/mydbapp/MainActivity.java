@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d(TAG, "onCreate");
         listView = findViewById(R.id.listFilms);
         ImageButton btnAdd = findViewById(R.id.btnAdd);
         dbHandler = new DatabaseHandler(this);
@@ -87,11 +88,12 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NonNull Call<List<Film>> call, @NonNull Response<List<Film>> response) {
                         dbHandler.deleteAll();
-                        films = response.body();
-                        for (Film film : films) {
+                        List<Film> responseList = response.body();
+                        for (Film film : responseList) {
                             dbHandler.addFilm(film);
                         }
-                        refreshListView();
+                        films.addAll(responseList);
+                        filmAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -99,14 +101,14 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Something gone wrong!", Toast.LENGTH_SHORT).show();
                     }
                 });
-                refreshListView();
-                Toast.makeText(this, films.toString(), Toast.LENGTH_LONG).show();
                 break;
             case R.id.menuClear:
                 dbHandler.deleteAll();
                 refreshListView();
                 break;
         }
+        films.addAll(dbHandler.getAllFilms());
+        filmAdapter.notifyDataSetChanged();
         return super.onOptionsItemSelected(item);
     }
 

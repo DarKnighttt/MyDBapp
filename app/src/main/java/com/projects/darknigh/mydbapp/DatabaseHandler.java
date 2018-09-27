@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabaseHandle
     private static final String FILM_DIR_NAME = "director";
     private static final String FILM_BUDGET = "budget";
     private static final String FILM_DATE = "date";
-
+    String TAG = "myLog";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -48,7 +48,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabaseHandle
         values.put(FILM_DIR_NAME, film.getDirector());
         values.put(FILM_BUDGET, film.getBudget());
         values.put(FILM_DATE, film.getDate());
-
+        Log.d(TAG, "Film added: " + film.toString());
         db.insert(TABLE_FILMS, null, values);
         db.close();
     }
@@ -57,20 +57,20 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabaseHandle
     public Film getFilm(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Film film;
-        Cursor cursor = db.query(TABLE_FILMS, new String[] { FILM_ID,
-                        FILM_DIR_NAME, FILM_BUDGET, FILM_DATE }, FILM_ID + "=?",
-                new String[] { String.valueOf(id) }, null, null, null, null);
+        Cursor cursor = db.query(TABLE_FILMS, new String[]{FILM_ID,
+                        FILM_DIR_NAME, FILM_BUDGET, FILM_DATE}, FILM_ID + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
 
-        if (cursor != null){
+        if (cursor != null) {
             cursor.moveToFirst();
         }
 
 
         film = new Film(Integer.valueOf(cursor.getString(0)),
-                            cursor.getString(1),
-                            cursor.getString(2),
-                            Integer.valueOf(cursor.getString(3)),
-                            cursor.getString(4));
+                cursor.getString(1),
+                cursor.getString(2),
+                Integer.valueOf(cursor.getString(3)),
+                cursor.getString(4));
         cursor.close();
         return film;
     }
@@ -107,13 +107,13 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabaseHandle
         values.put(FILM_BUDGET, film.getBudget());
         values.put(FILM_DATE, film.getDate());
         db.update(TABLE_FILMS, values, FILM_ID + " = ?",
-                new String[] { String.valueOf(film.getID()) });
+                new String[]{String.valueOf(film.getID())});
     }
 
     @Override
     public void deleteFilm(Film film) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_FILMS, FILM_ID + " = ?", new String[] { String.valueOf(film.getID()) });
+        db.delete(TABLE_FILMS, FILM_ID + " = ?", new String[]{String.valueOf(film.getID())});
         db.close();
     }
 
